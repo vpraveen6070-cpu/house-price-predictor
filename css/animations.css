@@ -110,6 +110,38 @@
   100% { background-position: 50% 40%; }
 }
 
+@keyframes flipInX {
+  from {
+    transform: perspective(1000px) rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes float3d {
+  0%, 100% { transform: translateZ(20px) translateY(0); }
+  50% { transform: translateZ(50px) translateY(-10px); }
+}
+
+@keyframes growRight {
+  from { width: 0; }
+  to { width: var(--target-width, 100%); }
+}
+
+@keyframes pulseBorder {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ===== Animation utility classes ===== */
 .animate-fade-in {
   animation: fadeInUp 0.6s ease forwards;
@@ -121,6 +153,16 @@
 .animate-fade-in-delay-4 { animation: fadeInUp 0.6s ease 0.4s forwards; opacity: 0; }
 .animate-fade-in-delay-5 { animation: fadeInUp 0.6s ease 0.6s forwards; opacity: 0; }
 
+.animate-3d-entrance {
+  animation: flipInX 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  backface-visibility: hidden;
+}
+
+.animate-float-3d {
+  animation: float3d 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
 .animate-float { animation: float 4s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulseGlow 2s infinite; }
 .animate-spin { animation: spin 1s linear infinite; }
@@ -130,10 +172,25 @@
   animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
+/* Progress Bar Animation */
+.animate-grow {
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal-active .animate-grow {
+  width: var(--target-width, 100%);
+}
+
+.nav-cta.animate-pulse {
+  animation: pulseBorder 2s infinite;
+}
+
 /* Scroll Reveal Base */
 .reveal {
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
 
@@ -142,12 +199,12 @@
   transform: translate(0, 0) scale(1) !important;
 }
 
-/* Directional Reveals */
-.reveal-up { transform: translateY(40px); }
-.reveal-down { transform: translateY(-40px); }
-.reveal-left { transform: translateX(-40px); }
-.reveal-right { transform: translateX(40px); }
-.reveal-scale { transform: scale(0.9); }
+/* Directional Reveals — Reduced distances for smoothness */
+.reveal-up { transform: translateY(25px); }
+.reveal-down { transform: translateY(-25px); }
+.reveal-left { transform: translateX(-25px); }
+.reveal-right { transform: translateX(25px); }
+.reveal-scale { transform: scale(0.96); }
 
 /* Staggered Delays for Grid Items */
 .reveal-delay-1 { transition-delay: 0.1s; }

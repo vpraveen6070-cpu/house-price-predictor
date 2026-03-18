@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadHistory();
   initOwlCarousel();
   initScrollReveal();
+  initTiltEffect();
 });
 
 /* ===== DARK MODE ===== */
@@ -309,16 +310,41 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("reveal-active");
-        // Optionally unobserve if we only want it to reveal once
-        observer.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove("reveal-active");
       }
     });
   }, {
-    threshold: 0.15, // Trigger when 15% of element is visible
-    rootMargin: "0px 0px -50px 0px" // Slight offset for better feel
+    threshold: 0.05, // Trigger sooner (5% visible)
+    rootMargin: "0px 0px -80px 0px" // More breathing room at the bottom
   });
 
   revealElements.forEach(el => observer.observe(el));
+}
+
+/* ===== 3D TILT EFFECT ===== */
+function initTiltEffect() {
+  const cards = document.querySelectorAll(".tilt-card");
+  
+  cards.forEach(card => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    });
+  });
 }
 
 /* ===== OWL FEATURES PSEUDO CAROUSEL ===== */
